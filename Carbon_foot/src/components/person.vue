@@ -677,19 +677,45 @@ header h1 {
   font-size: 1rem;
   margin-bottom: 15px;
   background-color: #fafafa;
-  transition: border-color 0.3s;
+  transition: all 0.3s;
+  -webkit-appearance: none; /* 移除默认样式 */
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%231976d2" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 20px;
+  padding-right: 35px;
+  border-radius: 12px; /* 新增圆角 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* 新增阴影效果 */
+  transition: all 0.3s ease; /* 平滑过渡效果 */
 }
 
-.input-group input:hover,
-.input-group select:hover {
-  border-color: #1976d2;
+.input-group select {
+  background-color: #fafafa;
+  border: 1px solid #90caf9;
+  color: #333;
+  font-size: 1rem;
 }
 
-.input-group input:focus,
 .input-group select:focus {
   outline: none;
-  border-color: #1976d2;
-  box-shadow: 0 0 5px rgba(25, 118, 210, 0.3);
+  border-color: #1565c0;
+  background-color: white;
+}
+
+.input-group select:hover {
+  border-color: #1565c0;
+  background-color: #f5fbff;
+}
+
+.input-group .option {
+  padding: 10px;
+  background-color: #fff;
+  transition: background-color 0.3s;
+}
+
+.input-group .option:hover {
+  background-color: #e3f2fd;
 }
 
 .checkbox-group {
@@ -955,6 +981,22 @@ header h1 {
     background-position: right 10px center;
     background-size: 20px;
     padding-right: 35px;
+    border-radius: 12px; /* 新增圆角 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* 新增阴影效果 */
+    transition: all 0.3s ease; /* 平滑过渡效果 */
+  }
+
+  .input-group input:hover,
+  .input-group select:hover {
+    border-color: #1565c0; /* 更深的蓝色 */
+    box-shadow: 0 4px 8px rgba(21, 101, 192, 0.2); /* 增强悬停阴影 */
+  }
+
+  .input-group input:focus,
+  .input-group select:focus {
+    outline: none;
+    border-color: #1565c0; /* 统一焦点边框颜色 */
+    box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.2); /* 聚焦时的发光效果 */
   }
 
   .button-container {

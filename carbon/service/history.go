@@ -25,7 +25,8 @@ func History(c *gin.Context) {
 	}
 
 	var history []historyData
-	err := db.Model(&model.User{}).Order("updated_at desc").Find(&history).Error
+	err := db.Model(&model.User{}).Where("name = ?", curUser.Name).
+		Order("updated_at desc").Find(&history).Error
 	if err != nil {
 		Failed(c, err.Error())
 		return

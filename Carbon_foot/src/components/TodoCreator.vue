@@ -1,33 +1,52 @@
-<script setup>
-import { reactive } from "vue"
+<template>
+  <div class="input-wrap" :class="{ 'input-err ': todoState.invalid }">
+      <input type="text" v-model="todoState.todo">
+      <!-- 传给父组件TodoView -->
+      <button @click="createTodo()">Create</button>
+  </div>
+  <p v-show="todoState.invalid" class="err-msg">{{ todoState.errMsg }}</p>
+</template>
 
-const emit = defineEmits(["create-todo"])
+<script setup>
+import { reactive } from "vue";
+import api from '@/http'; // 引入全局配置的 axios 实例
+const emit = defineEmits(["create-todo"]);
 // 使用ref就是.value  使用reactive就是对象.属性
 const todoState = reactive({
-  todo: "",
-  invalid: null,
-  errMsg: "",
-})
-const createTodo = () => {
-  todoState.invalid = null;
-  if (todoState.todo !== "") {
-    emit("create-todo", todoState.todo)
-    todoState.todo = "";
-    return;
+todo: "",
+invalid: null,
+errMsg: "",
+});
+
+const createTodo = async () => {
+todoState.invalid = null;
+if (todoState.todo !== "") {
+  try {
+    const response = await api.post('/plan/add', {
+      content: todoState.todo
+    });
+    if (response.data.Code === 1) {
+      emit("create-todo", {
+        id: response.data.Data,
+        content: todoState.todo,
+        isCompleted: false
+      });
+      todoState.todo = "";
+    } else {
+      todoState.invalid = true;
+      todoState.errMsg = response.data.Msg;
+    }
+  } catch (error) {
+    todoState.invalid = true;
+    todoState.errMsg = "请求出错，请稍后再试";
+    console.error('请求出错:', error);
   }
+} else {
   todoState.invalid = true;
   todoState.errMsg = "Todo value cannot be empty";
 }
+};
 </script>
-
-<template>
-    <div class="input-wrap" :class="{ 'input-err ': todoState.invalid }">
-        <input type="text" v-model="todoState.todo">
-        <!-- 传给父组件TodoView -->
-        <button @click="createTodo()">Create</button>
-    </div>
-    <p v-show="todoState.invalid" class="err-msg">{{ todoState.errMsg }}</p>
-</template>
 
 <style lang="scss" scoped>
 button {

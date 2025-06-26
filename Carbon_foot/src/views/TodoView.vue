@@ -1,72 +1,83 @@
 <script setup>
-import { ref, watch, computed } from "vue"
-import { uid } from "uid"
-import { Icon } from "@iconify/vue"
+import { ref, watch, computed, onMounted } from "vue";
+import { uid } from "uid";
+import { Icon } from "@iconify/vue";
 import TodoCreator from '../components/TodoCreator.vue';
 import TodoItem from '../components/TodoItem.vue';
 import { useRouter } from "vue-router";
-// import { useTodoStore } from "@/stores/todoStore";
-// console.log(useTodoStore());
-// const todoStore = useTodoStore()
+import api from '@/http'; // 引入全局配置的 axios 实例
+
 const todoList = ref([]);
-// const todoList2 = computed(() => todoStore.todoList);
-const router = useRouter()
+const router = useRouter();
+
 const back = () => {
-  router.push('/')
-}
+  router.push('/');
+};
 
 watch(
   todoList,
   () => {
-    setTodoListLocalStorage()
+    setTodoListLocalStorage();
   },
   {
     deep: true,
   }
-)
+);
 
 const todoCompleted = computed(() => {
-  // 所有的都完成了就是true，否则是false
-  return todoList.value.every((todo) => todo.isCompleted)
-})
+  return todoList.value.every((todo) => todo.isCompleted);
+});
 
-const fetchTodoList = () => {
-  const savedTodoList = JSON.parse(localStorage.getItem("todoList"))
-  if (savedTodoList) {
-    todoList.value = savedTodoList;
+const fetchTodoList = async () => {
+  try {
+    const response = await api.get('/plan/list');
+    if (response.data.Code === 1) {
+      todoList.value = response.data.Data.map(item => ({
+        id: item.id,
+        todo: item.content,
+        isCompleted: item.finished === 1,
+        isEditing: false
+      }));
+    } else {
+      console.error('获取计划列表失败:', response.data.Msg);
+    }
+  } catch (error) {
+    console.error('请求出错:', error);
   }
-}
-
-fetchTodoList();
+};
 
 const setTodoListLocalStorage = () => {
-  localStorage.setItem("todoList", JSON.stringify(todoList.value))
-}
+  localStorage.setItem("todoList", JSON.stringify(todoList.value));
+};
 
-const createTodo = (todo) => {
+const createTodo = (newTodo) => {
   todoList.value.push({
-    id: uid(),
-    todo,
-    isCompleted: null,
-    isEditing: null,
+    id: newTodo.id,
+    todo: newTodo.content,
+    isCompleted: newTodo.isCompleted,
+    isEditing: false
   });
-}
+};
 
 const toggleTodoComplete = (todoPos) => {
-  todoList.value[todoPos].isCompleted = !todoList.value[todoPos].isCompleted
-}
+  todoList.value[todoPos].isCompleted = !todoList.value[todoPos].isCompleted;
+};
 
-const toggleEditTodo =  (todoPos) => {
-  todoList.value[todoPos].isEditing = !todoList.value[todoPos].isEditing
-}
+const toggleEditTodo = (todoPos) => {
+  todoList.value[todoPos].isEditing = !todoList.value[todoPos].isEditing;
+};
 
 const updateTodo = (todoVal, todoPos) => {
-  todoList.value[todoPos].todo = todoVal
-}
+  todoList.value[todoPos].todo = todoVal;
+};
 
 const deleteTodo = (todoId) => {
-  todoList.value = todoList.value.filter((todo) => todo.id !== todoId)
-}
+  todoList.value = todoList.value.filter((todo) => todo.id !== todoId);
+};
+
+onMounted(() => {
+  fetchTodoList();
+});
 </script>
 
 <template>

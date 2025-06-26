@@ -1,4 +1,5 @@
 <template>
+  <div id="section-homepage"></div>
     <div class="dowebok" :class="{ 's--signup': !isLogin }">
       <!-- 登录表单 -->
       <div class="form sign-in">
@@ -207,6 +208,20 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
   
+/* #section-homepage::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(../assets/amiya.png);
+  background-repeat: no-repeat;
+  background-position: 0 center;
+  background-size: auto 100%;
+  filter: contrast(50%);
+  opacity: 0.3;
+} */
   
   .form {
       position: relative;

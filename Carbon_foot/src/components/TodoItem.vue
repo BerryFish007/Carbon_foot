@@ -1,22 +1,75 @@
 <script setup>
-// import { defineProps } from "vue";
+import { ref } from "vue";
 import { Icon } from "@iconify/vue";
+import api from '@/http'; // 引入全局配置的 axios 实例
+
 const props = defineProps({
   todo: {
     type: Object,
     required: true,
-    // default() {
-    //     return {
-
-    //     }
-    // }
   },
   index: {
     type: Number,
     required: true,
   },
 });
-defineEmits(["toggle-complete", "edit-todo", "update-todo", "delete-todo"]);
+
+const emit = defineEmits(["toggle-complete", "edit-todo", "update-todo", "delete-todo"]);
+const editedContent = ref(props.todo.todo);
+
+const handleInputChange = (value) => {
+  editedContent.value = value;
+};
+
+const saveEditedTodo = async () => {
+  try {
+    const response = await api.post('/plan/edit', {
+      id: props.todo.id,
+      content: editedContent.value
+    });
+
+    if (response.data.Code === 1) {
+      emit('update-todo', editedContent.value, props.index);
+      emit('edit-todo', props.index); // 关闭编辑状态
+    } else {
+      console.error('编辑计划失败:', response.data.Msg);
+    }
+  } catch (error) {
+    console.error('请求出错:', error);
+  }
+};
+
+const toggleComplete = async () => {
+  try {
+    const response = await api.post('/plan/finished', {
+      id: props.todo.id
+    });
+
+    if (response.data.Code === 1) {
+      emit('toggle-complete', props.index);
+    } else {
+      console.error('完成计划失败:', response.data.Msg);
+    }
+  } catch (error) {
+    console.error('请求出错:', error);
+  }
+};
+
+const deleteTodo = async () => {
+  try {
+    const response = await api.post('/plan/delete', {
+      id: props.todo.id
+    });
+
+    if (response.data.Code === 1) {
+      emit('delete-todo', props.todo.id);
+    } else {
+      console.error('删除计划失败:', response.data.Msg);
+    }
+  } catch (error) {
+    console.error('请求出错:', error);
+  }
+};
 </script>
 
 <template>
@@ -24,14 +77,14 @@ defineEmits(["toggle-complete", "edit-todo", "update-todo", "delete-todo"]);
     <input
       type="checkbox"
       :checked="todo.isCompleted"
-      @input="$emit('toggle-complete', index)"
+      @input="toggleComplete"
     />
     <div class="todo">
       <input
         v-if="todo.isEditing"
         type="text"
         :value="todo.todo"
-        @input="$emit('update-todo', $event.target.value, index)"
+        @input="handleInputChange($event.target.value)"
       />
       <span v-else :class="{ 'completed-todo': todo.isCompleted }">{{
         todo.todo
@@ -44,7 +97,7 @@ defineEmits(["toggle-complete", "edit-todo", "update-todo", "delete-todo"]);
         class="icon"
         color="#41b080"
         width="30"
-        @click="$emit('edit-todo', index)"
+        @click="saveEditedTodo"
       />
       <Icon
         v-else
@@ -59,7 +112,7 @@ defineEmits(["toggle-complete", "edit-todo", "update-todo", "delete-todo"]);
         class="icon"
         color="#f95e5e"
         width="30"
-        @click="$emit('delete-todo', todo.id)"
+        @click="deleteTodo"
       />
     </div>
   </li>

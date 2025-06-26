@@ -33,7 +33,7 @@
           <p><strong>计算范围：</strong>{{ record.month }} 个月</p>
         </div>
         <div class="card-footer">
-          <button @click.stop="deleteRecord(record.id)" class="delete-btn">🗑 删除</button>
+          <!-- <button @click.stop="deleteRecord(record.id)" class="delete-btn">🗑 删除</button> -->
         </div>
       </div>
     </div>
@@ -183,39 +183,22 @@ async function loadHistory() {
     }
 
     const url = "/user/history";
-    let resData;
     // 发送请求并处理异常
   try {
     const response = await api.get(url);
-    if (response.data.Data && response.data.Data.length > 0) {
+    console.log(response.data.Data);
       history.value = response.data.Data.map((record, index) => ({
         id: index + 1,
         carbon: record.carbon,
         month: record.month,
         detail: {
-          transportation: record.detail.a,
-          household: record.detail.b,
-          diet: 0, // 默认值
-          shopping: 0
+          transportation: record.detail.transportation,
+          household: record.detail.household,
+          diet: record.detail.diet,
+          shopping: record.detail.shopping
         },
         updated_at: record.updated_at
       }));
-      localStorage.setItem("carbonFootprintHistory", JSON.stringify(response.data.Data));
-      const stored = localStorage.getItem("carbonFootprintHistory");
-      if (stored) {
-        history.value = JSON.parse(stored)
-      }
-      console.log(stored);
-    } else {
-      // 没有远程数据时使用本地缓存
-      const stored = localStorage.getItem("carbonFootprintHistory");
-      if (stored) {
-        history.value = JSON.parse(stored);
-      } else {
-        history.value = [];
-        ElMessage.info("暂无历史记录");
-      }
-    }
   } catch (error) {
     console.error("请求失败:", error);
     if (error.response && error.response.status === 401) {
@@ -223,18 +206,16 @@ async function loadHistory() {
       localStorage.removeItem("token");
       delete api.defaults.headers.common["Authorization"];
       router.push("/MyLogin");
-    } else {
-      ElMessage.error("请求失败");
     }
   }
   
 }
 
-// 删除记录
-function deleteRecord(id) {
-  history.value = history.value.filter(r => r.id !== id)
-  localStorage.setItem('carbonFootprintHistory', JSON.stringify(history.value))
-}
+// // 删除记录
+// function deleteRecord(id) {
+//   history.value = history.value.filter(r => r.id !== id)
+//   localStorage.setItem('carbonFootprintHistory', JSON.stringify(history.value))
+// }
 
 // 查看详情
 function viewDetails(record) {

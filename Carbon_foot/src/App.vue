@@ -34,17 +34,26 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useRouter, useRoute, } from 'vue-router';
 import api from '@/http'; // 引入全局 axios 实例
 const route = useRoute(); // 获取当前路由
 const router = useRouter();
 const currentUserUsername = ref('用户');
 
-onMounted(() => {
+// 存储原始的 setItem 方法
+const originalSetItem = localStorage.setItem;
 
+// 重写 localStorage.setItem 以触发事件
+localStorage.setItem = function(key, value) {
+  const result = originalSetItem.apply(this, arguments);
+  window.dispatchEvent(new Event(`storage-${key}`));
+  return result;
+};
+
+// 更新用户名函数
+const updateUsername = () => {
   const userStr = localStorage.getItem('user');
-  
   if (userStr) {
     try {
       const user = JSON.parse(userStr);
@@ -55,6 +64,20 @@ onMounted(() => {
       console.error('解析 localStorage 中的 user 出错:', e);
     }
   }
+};
+
+onMounted(() => {
+  // 初始加载时设置用户名
+default_username:
+  updateUsername();
+
+  // 监听用户信息变化
+  window.addEventListener('storage-user', updateUsername);
+});
+
+onUnmounted(() => {
+  // 移除事件监听
+  window.removeEventListener('storage-user', updateUsername);
 });
 
 // 处理下拉菜单点击
