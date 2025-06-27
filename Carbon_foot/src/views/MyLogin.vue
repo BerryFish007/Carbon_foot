@@ -206,24 +206,23 @@
       margin: -300px 0 0 -450px;
       background: #fff;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      opacity: 0.9;
   }
   
-  
-  #section-homepage {
-    content: " ";
-    display: block;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url(../assets/image.webp);
-    background-repeat: no-repeat;
-    background-position: 0 center;
-    background-size: 100%;
-    filter: contrast(50%);
-    /* opacity: 0.3; */
-  }
+#section-homepage{
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);
+  background-image: linear-gradient(to right, #43e97b 0%, #38f9d7 100%);
+  background-repeat: no-repeat;
+  background-position: 0 center;
+  background-size: auto 100%;
+  filter: contrast(50%);
+  opacity: 0.3;
+}
   
   .form {
       position: relative;

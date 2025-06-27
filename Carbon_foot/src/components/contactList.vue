@@ -80,14 +80,22 @@ const displayedHistory = computed(() => {
 
 // 筛选最近 7 天
 function filterLast7Days() {
-  const now = Date.now()
-  filteredHistory.value = history.value.filter(r => now - r.updated_at <= 7 * 86400000)
+  const now = Date.now();
+  const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
+  filteredHistory.value = history.value.filter(r => {
+    const updatedAt = new Date(r.updated_at).getTime();
+    return updatedAt >= sevenDaysAgo;
+  });
 }
 
 // 筛选最近 30 天
 function filterLast30Days() {
-  const now = Date.now()
-  filteredHistory.value = history.value.filter(r => now - r.updated_at <= 30 * 86400000)
+  const now = Date.now();
+  const thirtyDaysAgo = now - 30 * 24 * 60 * 60 * 1000;
+  filteredHistory.value = history.value.filter(r => {
+    const updatedAt = new Date(r.updated_at).getTime();
+    return updatedAt >= thirtyDaysAgo;
+  });
 }
 
 // 恢复全部
