@@ -1,6 +1,5 @@
 <script setup>
 import { ref, watch, computed, onMounted } from "vue";
-import { uid } from "uid";
 import { Icon } from "@iconify/vue";
 import TodoCreator from '../components/TodoCreator.vue';
 import TodoItem from '../components/TodoItem.vue';
@@ -114,18 +113,13 @@ onMounted(() => {
 <style lang="scss" scoped>
 .place {
   height: 80vh;
-
 }
 .todo {
   width: 100%;
   background: url('@/assets/bg1.jpg') no-repeat;
   background-size: cover;
-  // height: 100vh;
-  // width: 100vw;
   background-attachment: fixed;
   position: relative;
-
-  
    button:hover {
       background-color: rgb(238, 232, 170, 0.7);
   }

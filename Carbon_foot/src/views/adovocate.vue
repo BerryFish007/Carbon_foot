@@ -239,6 +239,8 @@ setInterval(function () {
   box-shadow: 8px 8px 8px rgb(97, 132, 152);
   margin: 2vh 0;
   padding: 2vh;
+  background-color: azure;
+  opacity: 0.9;
   p {
     width: 50%;
     padding: 15px;
@@ -248,10 +250,14 @@ setInterval(function () {
     width: 400px;
     height: 250px;
     border-radius: 10px;
+    opacity: 0.99;
   }
 }
 .contain {
-    background-color: rgb(141, 207, 113, .8);
+  // background-image: url(../assets/首页背景1.jpg);
+  // background-position: 0 center;
+  // background-size:  100%;
+  background-color: rgb(159, 231, 207);
 }
 .des {
     margin: -30px auto;

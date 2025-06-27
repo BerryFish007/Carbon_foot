@@ -1,10 +1,10 @@
-<template>
+<template class="bigBg">
     		<el-backtop
 			:right="35"
 			:bottom="30" />
     <div class="contain">
         <div class="show">
-        <el-carousel :interval="4000" type="card" height="200px">
+        <el-carousel :interval="4000" type="card" height="300px">
           <el-carousel-item v-for="item in 4" :key="item">
             <img :src="`src/assets/show${item}.jpg`" alt="">
             <h3 text="2xl" justify="center">{{ item }}</h3>
@@ -47,7 +47,7 @@
           <br>
           <span :style="subtitleStyle"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;碳足迹是衡量人类活动对气候影响的关键指标，其重要性体现在多方面。它能直观反映个人、组织或产品在全生命周期的温室气体排放量，助力识别高排放环节以制定减排策略。在全球应对气候变化的背景下，碳足迹核算为国家实现 “双碳” 目标提供数据支撑，也推动企业优化生产流程、发展低碳技术。此外，它还能增强公众环保意识，引导绿色消费，促进经济社会向低碳可持续方向转型。</span>
           <div :style="circleStyle" class="circle"></div>
-          <img :style="imageStyle" src="@/assets/person.jpg" alt="">
+          <img :style="imageStyle" src="@/assets/person.png" alt="">
           <button :style="buttonStyle" @click="toggleContent"></button>
       </div>
   </div>
@@ -58,6 +58,7 @@
 import * as echarts from 'echarts';
 import { ref, computed } from 'vue';
 import { onMounted } from 'vue';
+
 onMounted(() => {
   const chartElement = document.getElementById('chart');
   if (!chartElement) {
@@ -278,17 +279,21 @@ const labelSetting = {
 </script>
 
 <style lang="scss" scoped>
-.contain {
-    padding: 5vh 0 2vh 0;
-    background-color: rgba(158, 212, 104, 0.6);
+.contain{
+  background-image: url(../assets/23232.jpg);
+    background-repeat: no-repeat;
+    background-position: 0 center;
+    background-size:  100%;
 }
+
 .show {
-    margin: 10vh 10vh;
+    margin: 0vh 10vh;
+    padding: 5vh 0 0 0;
     img {
-		width: 99%;
-		height: 98%;
-        border: 3px solid rgb(81, 233, 104,.7);
-        box-shadow: 17px 17px 17px rgb(135, 219, 135);
+		width: 100%;
+		height: 100%;
+    border: 1px solid #cdf9f3ab;
+    box-shadow: 17px 17px 17px rgb(135, 219, 135);
 	}
 }
 .el-carousel__item h3 {
@@ -314,7 +319,10 @@ const labelSetting = {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(158, 212, 104, 0.6);
+    background-image: url(../assets/23232.jpg);
+    background-repeat: no-repeat;
+    background-position: 0 center;
+    background-size:  100%;
 }
 #chart {
     width: 86vw;
@@ -326,7 +334,7 @@ const labelSetting = {
     justify-content: center;
     align-items: center;
     padding: 20px;
-    background-color: #e8e7e7;
+    background-color: #cdf9f3ab;
     padding-bottom: -100px;
 }
 
@@ -389,17 +397,20 @@ const labelSetting = {
       align-items: center;
       height: 100vh;
       overflow: hidden;
-      background-color: rgba(158, 212, 104, 0.6);
+      background-image: url(../assets/首页背景2.jpg);
+    background-repeat: no-repeat;
+    background-position: 0 center;
+    background-size:  100%;
   }
   
   .content {
       display: flex;
       width: 86vw;
       height: 84vh;
-      border: 30px #6AA8EC solid;
-      border-radius: 10px;
+      border: 30px #cdf9f3ab solid;
       position: relative;
       margin-top: -5vh;
+      border-radius: 10px;
       box-shadow: 17px 17px 17px;
   }
   
@@ -415,7 +426,7 @@ const labelSetting = {
   }
   
   .content-l {
-      background-color: #6AA8EC;
+    background-color: #cdf9f3ab;
       flex-direction: column;
       color: #fff;
       span {
@@ -451,7 +462,7 @@ const labelSetting = {
               width: 100%;
               height: 100%;
               line-height: 6vh;
-              color: #fff;
+              color: #000; 
           }
       }
   }
@@ -471,6 +482,7 @@ const labelSetting = {
           font: 320 50px '';
           font-family: 'Fredoka One', sans-serif;
           position: relative;
+          color: #000;
       }
       span {
           color: #0c4888;
@@ -494,7 +506,7 @@ const labelSetting = {
       width: 100px;
       height: 50px;
       border: #ffffffc0 solid 3px;
-      background-color: #0a3f777a;
+      background-color: #ffffff7a;
       border-radius: 3px;
       position: absolute;
       right: 20px;
